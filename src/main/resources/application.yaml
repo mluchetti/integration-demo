@@ -3,7 +3,7 @@ spring:
     name: integration-demo
 
   datasource:
-    url: "jdbc:h2:file:/data/demo;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=TRUE;AUTO_RECONNECT=TRUE;MODE=PostgreSQL;"
+    url: "jdbc:h2:file:./data/demo;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=TRUE;AUTO_RECONNECT=TRUE;MODE=PostgreSQL;"
     driverClassName: "org.h2.Driver"
     username: "sa"
     password: "password"
