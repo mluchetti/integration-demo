@@ -1,0 +1,108 @@
+spring:
+  application:
+    name: integration-demo
+
+  datasource:
+    url: "jdbc:h2:file:/data/demo;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=TRUE;AUTO_RECONNECT=TRUE;MODE=PostgreSQL;"
+    driverClassName: "org.h2.Driver"
+    username: "sa"
+    password: "password"
+  jpa:
+    #database-platform: "org.hibernate.dialect.H2Dialect"
+    defer-datasource-initialization: "true"
+    show-sql: true
+    open-in-view: true
+    hibernate:
+      ddl-auto: "create-drop"
+  h2:
+    console:
+      #http://localhost:8080/h2-console
+      enabled: true
+
+  # Embedded ActiveMQ Configuration
+  activemq:
+    broker-url: vm://embedded?broker.persistent=false,useShutdownHook=false
+    #in-memory: true
+    non-blocking-redelivery: true
+    packages:
+      trust-all: false
+      trusted: com.ameren.eis
+    pool:
+      block-if-full: true
+      block-if-full-timeout: -1
+      enabled: false
+      idle-timeout: 30000
+      max-connections: 2
+      max-sessions-per-connection: 500
+      time-between-expiration-check: -1
+      use-anonymous-producers: true
+
+  # Spring JMS Settings
+  jms:
+    #client-id: integration-demo
+    listener:
+      auto-startup: true
+      min-concurrency: 1
+      max-concurrency: 1
+      session:
+        acknowledge-mode: auto
+        transacted: true
+    pub-sub-domain: true
+    template:
+      default-destination:
+      delivery-mode: non-persistent
+      priority: 4
+      qos-enabled: true
+      receive-timeout: 1000
+      time-to-live: 36000
+
+# Logging configuration print only messages for tutorial purposes
+logging:
+  pattern:
+    console: "%d{ISO8601} %p [%C][%t]: %m%n"
+  level:
+    root: "warn"
+    web: "warn"
+    sql: "warn"
+    com.ameren.eis: "info"
+    org.springframework.boot: "warn"
+    org.springframework.context: "warn"
+    org.springframework.jms.listener: "info"
+    org.springframework.web.servlet.handler: "error"
+
+#API Specification Documentation that isn't done using Code Annotations
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api-docs
+    version: openapi-3-0
+  open-api:
+    info:
+      contact:
+        name: "Deep Thought...42!"
+        email: eisopex@ameren.com
+        url: http://localhost:8080/DeepThought_42.html
+      title: "Integration Demo"
+      description: |
+        ### Hi Everyone! Ciao a tutti! 
+        This API is a helper for publishing messages/events to the ActiveMQ instance for easy demonstration of a pub/sub integration design implemented in SpringBoot Java.  
+
+        When times as an integrator are difficult, always remember...  
+        **The answer is 42!** *Unless it involves Unicorns and [cough\*, cough\*] Rainbows...*  
+        
+        Ready? Let's get started! Pronti? Cominciamo!
+
+        <table>
+          <tr>
+            <td><img src="http://localhost:8080/DeepThought-42.png" alt="DeepThought...42!" width="300"/> <img src="http://localhost:8080/unicorn.jpg" alt="DeepThought...42!" width="185"/><td>
+          </tr>
+        <table>
+
+        ##### Our Integration Design:  
+        <img src="http://localhost:8080/design.svg" alt="Design" width="700"/>
+
+        **Documentation Notes:**  
+        Don't put too much in this description since each individual REST resource/method should also have a description as well as an API Catalog page per <a href=https://confluence.com/display/EIS/Exchange+Template>documentation guidelines</a>  
+        If this is an API managed outside of the Anypoint Platform (i.e. Product Team Managed AWS deployed containers), then include a link to the Client Registration portal for this specific API.
+      version: 42.0.20250313
+      termsOfService: http://localhost:8080/terms_of_service.html
