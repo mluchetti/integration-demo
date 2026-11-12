@@ -6,7 +6,6 @@ import java.util.Iterator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +21,11 @@ public class DatabaseSubscriber {
 
     private static Logger logger = LoggerFactory.getLogger(DatabaseSubscriber.class);
 
-    @Autowired
-    UserEventRepository userEventRepository;
+    final UserEventRepository userEventRepository;
+
+    DatabaseSubscriber(UserEventRepository userEventRepository) {
+        this.userEventRepository = userEventRepository;
+    }
 
     /**
      * This method is a JMS listener that listens to messages on the PUB_TOPIC destination 

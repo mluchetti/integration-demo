@@ -2,7 +2,6 @@ package com.ameren.eis.integration_demo.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +17,11 @@ public class HighRatingDBLogger {
 
     private static Logger logger = LoggerFactory.getLogger(HighRatingDBLogger.class);
 
-    @Autowired
-    HighRatingLogRepository highRatingLogRepository;
+    final HighRatingLogRepository highRatingLogRepository;
+
+    HighRatingDBLogger(HighRatingLogRepository highRatingLogRepository) {
+        this.highRatingLogRepository = highRatingLogRepository;
+    }
 
     /**
      * This method is a JMS listener that listens to messages on the PUB_TOPIC destination 

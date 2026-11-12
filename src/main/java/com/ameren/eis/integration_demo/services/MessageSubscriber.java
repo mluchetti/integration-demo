@@ -2,7 +2,6 @@ package com.ameren.eis.integration_demo.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +17,11 @@ public class MessageSubscriber {
 
     private static Logger logger = LoggerFactory.getLogger(MessageSubscriber.class);
 
-    @Autowired
-    UserEventRepository userEventRepository;
+    final UserEventRepository userEventRepository;
+
+    MessageSubscriber(UserEventRepository userEventRepository) {
+        this.userEventRepository = userEventRepository;
+    }
 
     @JmsListener(destination = AmqConfiguration.USER_QUEUE, containerFactory = "jmsContainerFactory", id = "P2P-Channel")
     public void processMessage(UserEventMessage receivedUser, TextMessage message) {

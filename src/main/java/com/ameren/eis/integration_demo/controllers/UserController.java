@@ -3,7 +3,6 @@ package com.ameren.eis.integration_demo.controllers;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -35,7 +34,6 @@ public class UserController {
 
     UserService userService;
     
-    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
