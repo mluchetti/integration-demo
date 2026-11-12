@@ -1,6 +1,9 @@
 package com.ameren.eis.integration_demo.services;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -41,5 +44,18 @@ class HighRatingDBLoggerTest {
         //Assert
         assertTrue(true);
 
+    }
+
+    @Test
+    void testProcessHighRatingSubscriberException() {
+
+        when(highRatingLogRepository.save(any(HighRatingLog.class)))
+                .thenThrow(new RuntimeException("Database error"));
+
+        assertDoesNotThrow(() -> subscriber.processHighRatingSubscriber(
+                new UserEventMessage(),
+                textMessage));
+
+        verify(highRatingLogRepository).save(any(HighRatingLog.class));
     }
 }

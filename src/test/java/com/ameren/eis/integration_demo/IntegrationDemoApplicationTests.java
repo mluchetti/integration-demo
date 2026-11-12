@@ -21,7 +21,7 @@ class IntegrationDemoApplicationTests {
 		String[] args = new String[] {};
 
 		// Mock SpringApplication.run to prevent actual application startup
-		SpringApplication springApplicationMock = mock(SpringApplication.class);
+		//SpringApplication springApplicationMock = mock(SpringApplication.class);
 
 		// Spy on SpringApplication to override the static run method
 		try (var mockedStatic = mockStatic(SpringApplication.class)) {

@@ -21,6 +21,13 @@ public class HighRatingDBLogger {
     @Autowired
     HighRatingLogRepository highRatingLogRepository;
 
+    /**
+     * This method is a JMS listener that listens to messages on the PUB_TOPIC destination 
+     * with a selector for ratings greater than or equal to 5.
+     * It processes the received UserEventMessage and logs it into the HighRatingLogRepository.
+     * @param receivedUser
+     * @param message
+     */
     @JmsListener(destination = AmqConfiguration.PUB_TOPIC, selector = "RatingFilter >= 5", containerFactory = "jmsContainerFactory", id = "DBLog-Subcriber")
     public void processHighRatingSubscriber(UserEventMessage receivedUser, TextMessage message) {
 

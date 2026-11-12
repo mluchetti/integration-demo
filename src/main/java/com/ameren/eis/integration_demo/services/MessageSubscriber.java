@@ -42,7 +42,5 @@ public class MessageSubscriber {
             logger.warn(e.getMessage(), e);
         }
     }
-
-  
-
+    
 }

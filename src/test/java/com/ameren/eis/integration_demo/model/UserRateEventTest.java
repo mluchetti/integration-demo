@@ -29,8 +29,12 @@ class UserRateEventTest {
             return new String(Files.readAllBytes(Paths.get("src/test/resources/Test-FILE-Sub.xml")));
         });
 
-        //Assert
-        assertEquals(content, Assertions.assertDoesNotThrow(urevent::toXml));
+        //Assert - replace all line endings with \n to avoid issues with different OS line endings
+        String expected = content.replaceAll("\\R", "\n");
+        String actual = Assertions.assertDoesNotThrow(urevent::toXml)
+                .replaceAll("\\R", "\n");
+        assertEquals(expected, actual);
 
     }
+
 }

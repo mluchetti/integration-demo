@@ -1,12 +1,19 @@
 package com.ameren.eis.integration_demo.services;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -39,32 +46,51 @@ class DatabaseSubscriberTest {
     }
 
     @Test
-    void testProcessDatabaseSubscriber_whenEmailAlreadyExists() {
+    void testProcessDatabaseSubscriber_whenEmailAlreadyExists_updateRating() {
         // Arrange
         list.add(ue);
-        when(userEventRepository.findByEmail(null)).thenReturn(list);
-        when(userEventRepository.save(ue)).thenReturn(ue);
+        when(userEventRepository.findByEmail(ue.getEmail())).thenReturn(list);
+        when(userEventRepository.save(any(UserEvent.class))).thenReturn(ue);
 
-        // Act
-        subscriber.processDatabaseSubscriber(new UserEventMessage(), textMessage);
+        // Act - New rating and active status for an existing email
+        UserEventMessage user = new UserEventMessage(ue.getEmail(), 5.0d, true);
+        subscriber.processDatabaseSubscriber(user, textMessage);
+
+        ArgumentCaptor<UserEvent> captor = ArgumentCaptor.forClass(UserEvent.class);
 
         // Assert
-        assertTrue(true);
+        verify(userEventRepository).save(captor.capture());
+        assertEquals(ue.getEmail(), captor.getValue().getEmail());
+    }
+
+    @Test
+    void testProcessDatabaseSubscriber_whenEmailNotExists_addRating() {
+        // Arrange
+        when(userEventRepository.findByEmail(ue.getEmail())).thenReturn(list);
+        when(userEventRepository.save(any(UserEvent.class))).thenReturn(ue);
+
+        // Act
+        UserEventMessage user = new UserEventMessage(ue.getEmail(), 3.5d, true);
+        subscriber.processDatabaseSubscriber(user, textMessage);
+        
+        ArgumentCaptor<UserEvent> captor = ArgumentCaptor.forClass(UserEvent.class);
+
+        // Assert
+        verify(userEventRepository).save(captor.capture());
+        assertEquals(ue.getEmail(), captor.getValue().getEmail());
 
     }
 
     @Test
-    void testProcessDatabaseSubscriber_whenEmailNotExists() {
-        // Arrange
-        when(userEventRepository.findByEmail(null)).thenReturn(list);
-        when(userEventRepository.save(ue)).thenReturn(ue);
+    void testProcessDatabaseSubscriber_whenException() {
 
-        // Act
-        subscriber.processDatabaseSubscriber(new UserEventMessage(), textMessage);
+        UserEventMessage user = new UserEventMessage("unittest@mail.com", 5.0d, true);
 
-        // Assert
-        assertTrue(true);
+        when(userEventRepository.findByEmail(anyString()))
+                .thenThrow(new RuntimeException("Database error"));
 
+        assertDoesNotThrow(() -> subscriber.processDatabaseSubscriber(user, textMessage));
+
+        verify(userEventRepository).findByEmail("unittest@mail.com");
     }
-
 }

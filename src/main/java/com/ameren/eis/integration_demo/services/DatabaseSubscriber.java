@@ -25,6 +25,12 @@ public class DatabaseSubscriber {
     @Autowired
     UserEventRepository userEventRepository;
 
+    /**
+     * This method is a JMS listener that listens to messages on the PUB_TOPIC destination 
+     * It processes the received UserEventMessage and upserts it into the UserEventRepository.
+     * @param receivedUser
+     * @param message
+     */
     @JmsListener(destination = AmqConfiguration.PUB_TOPIC, containerFactory = "jmsContainerFactory", id = "DB-Subcriber")
     public void processDatabaseSubscriber(UserEventMessage receivedUser, TextMessage message) {
 
