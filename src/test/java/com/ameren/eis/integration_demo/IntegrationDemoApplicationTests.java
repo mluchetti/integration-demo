@@ -1,7 +1,6 @@
 package com.ameren.eis.integration_demo;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.mockStatic;
 
 import org.junit.jupiter.api.Test;
