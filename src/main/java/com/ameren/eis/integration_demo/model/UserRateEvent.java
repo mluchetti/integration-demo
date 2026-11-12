@@ -3,6 +3,9 @@ package com.ameren.eis.integration_demo.model;
 import java.io.Serializable;
 import java.io.StringWriter;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
@@ -39,6 +42,19 @@ public class UserRateEvent implements Serializable  {
         StringWriter sw = new StringWriter();           
         jaxbMarshaller.marshal(this, sw);
         return sw.toString();            
+    }
+
+    public String toJson() throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public double getRating() {
+        return rating;
     }
 
 }

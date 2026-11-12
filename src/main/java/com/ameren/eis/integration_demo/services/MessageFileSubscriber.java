@@ -36,8 +36,15 @@ public class MessageFileSubscriber {
             myWriter.write(rateEvent.toXml());
             myWriter.close();
 
-            logger.info(">>>>>>> correlationId = {} messageId = {} \n{}", message.getJMSCorrelationID(),
-                    message.getJMSMessageID(), receivedUser.toJson());
+            logger.info(">>>>>>> correlationId = {} messageId = {} \n{}", 
+                    message.getJMSCorrelationID(),
+                    message.getJMSMessageID(), 
+                    rateEvent.toXml());
+
+            logger.debug(">>>>>>> correlationId = {} messageId = {} \n{}", 
+                    message.getJMSCorrelationID(),
+                    message.getJMSMessageID(), 
+                    rateEvent.toJson());
 
         } catch (Exception e) {
             logger.warn(e.getMessage(), e);
